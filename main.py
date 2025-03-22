@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request
+from flask.cli import load_dotenv
 from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -7,21 +8,25 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
+import os
 
+# load env
 
-MOVIE_DB_API_KEY = "e15fa4eb76133d18a19adc26b6209b20"
+load_dotenv()
+
+MOVIE_DB_API_KEY = os.getenv("MOVIE_DB_API_KEY")
 MOVIE_DB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie"
 MOVIE_DB_INFO_URL = "https://api.themoviedb.org/3/movie"
 MOVIE_DB_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] =os.getenv("SECRET_KEY")
 Bootstrap5(app)
 
 # CREATE DB
 class Base(DeclarativeBase):
     pass
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movies.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
